@@ -22,7 +22,7 @@ public class BookDaoList implements BookDaoInterface {
 	@Override
 	public boolean addBook(Book book) {
 		for (Book temp : books)
-			if(temp.getIsbn() == book.getIsbn() || temp.getTitle().equals(book.getTitle()))
+			if(temp.getIsbn().equals(book.getIsbn()) || temp.getTitle().equals(book.getTitle()))
 				return false;
 		books.add(book);
 		return true;
@@ -31,7 +31,7 @@ public class BookDaoList implements BookDaoInterface {
 	@Override
 	public boolean removeBook(String isbn) {
 		for (Book temp : books)
-			if(temp.getIsbn() == isbn) {
+			if(temp.getIsbn().equals(isbn)) {
 				books.remove(temp);
 				return true;
 			}

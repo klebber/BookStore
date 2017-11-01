@@ -176,6 +176,12 @@ public class MainWindow extends JFrame {
 			table = new JTable();
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			table.setModel(new TableModel(null));
+			table.getColumnModel().getColumn(0).setPreferredWidth(107);
+			table.getColumnModel().getColumn(1).setPreferredWidth(159);
+			table.getColumnModel().getColumn(2).setPreferredWidth(80);
+			table.getColumnModel().getColumn(3).setPreferredWidth(130);
+			table.getColumnModel().getColumn(4).setPreferredWidth(109);
+			table.getColumnModel().getColumn(5).setPreferredWidth(84);
 		}
 		return table;
 	}
