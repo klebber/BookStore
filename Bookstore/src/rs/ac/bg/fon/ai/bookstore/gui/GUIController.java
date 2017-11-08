@@ -44,13 +44,14 @@ public class GUIController {
 		authorWindow.setLocationRelativeTo(frame);
 	}
 	
-	public static void addBook(String ISBN, String title, Genre genre, String author, String publisher, GregorianCalendar date) {
+	public static void addBook(String ISBN, String title, Genre genre, String author, String publisher, 
+			GregorianCalendar date) throws RuntimeException {
 		BookService.addBook(ISBN, title, genre, author, publisher, date);
 		mainWindow.applySelectedFilter();
 		addBookDialog.dispose();
 	}
 	
-	public static void removeBook(String isbn) {
+	public static void removeBook(String isbn) throws RuntimeException {
 		BookService.removeBook(isbn);
 		mainWindow.applySelectedFilter();
 	}
@@ -77,7 +78,7 @@ public class GUIController {
 		addAuthorDialog.setLocationRelativeTo(addAuthorDialog);
 	}
 	
-	public static void addAuthor(String name) {
+	public static void addAuthor(String name) throws RuntimeException {
 		AuthorService.addAuthor(name);
 		addAuthorDialog.dispose();
 		reloadAuthorList();
@@ -85,7 +86,7 @@ public class GUIController {
 		mainWindow.updateAuthorsArray(AuthorService.getAuthorsArray());
 	}
 	
-	public static void removeAuthor(String name) {
+	public static void removeAuthor(String name) throws RuntimeException {
 		AuthorService.removeAuthor(name);
 		BookService.removeBooksByAuthor(name);
 		reloadAuthorList();

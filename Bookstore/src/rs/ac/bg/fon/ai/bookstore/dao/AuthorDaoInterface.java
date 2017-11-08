@@ -6,8 +6,8 @@ import rs.ac.bg.fon.ai.bookstore.model.Author;
 
 public interface AuthorDaoInterface {
 
-	public boolean addAuthor(Author author);
-	public boolean removeAuthor(Author author);
+	public void addAuthor(Author author) throws RuntimeException;
+	public void removeAuthor(Author author) throws RuntimeException;
 	public List<Author> getAllAuthors();
 	public String[] getAuthorsArray();
 	

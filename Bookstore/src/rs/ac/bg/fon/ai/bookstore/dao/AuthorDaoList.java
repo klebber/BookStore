@@ -14,22 +14,21 @@ public class AuthorDaoList implements AuthorDaoInterface {
 	}
 	
 	@Override
-	public boolean addAuthor(Author author) {
+	public void addAuthor(Author author) throws RuntimeException {
 		for (Author temp : authors)
 			if(temp.equals(author))
-				return false;
+				throw new RuntimeException("Author with the same name already exists.");
 		authors.add(author);
-		return true;
 	}
 	
 	@Override
-	public boolean removeAuthor(Author author) {
+	public void removeAuthor(Author author) throws RuntimeException {
 		for(Author temp : authors)
 			if(temp.equals(author)) {
 				authors.remove(temp);
-				return true;
+				return;
 			}
-		return false;
+		throw new RuntimeException("Author with this name has not been found.");
 	}
 	
 	@Override

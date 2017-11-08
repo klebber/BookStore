@@ -272,7 +272,11 @@ public class AddBookDialog extends JDialog {
 			JOptionPane.showMessageDialog(frmAddBook, "The entered date is after today.");
 			return;
 		}
-		GUIController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	(String) cbAuthor.getSelectedItem(), txtPublisher.getText(), date);
+		try {
+			GUIController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	(String) cbAuthor.getSelectedItem(), txtPublisher.getText(), date);
+		} catch (RuntimeException e) {
+			JOptionPane.showMessageDialog(frmAddBook, e.getMessage());
+		}
 	}
 	
 	

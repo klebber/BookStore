@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JMenu;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTable;
@@ -239,7 +240,11 @@ public class MainWindow extends JFrame {
 			btnRemove.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(table.getSelectedRow() != -1)
-						GUIController.removeBook(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+						try {
+							GUIController.removeBook(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+						} catch (RuntimeException e2) {
+							JOptionPane.showMessageDialog(frmMain, e2.getMessage());
+						}
 				}
 			});
 			btnRemove.setMinimumSize(new Dimension(80, 23));

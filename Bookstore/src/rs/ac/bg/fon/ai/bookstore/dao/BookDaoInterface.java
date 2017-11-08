@@ -8,8 +8,8 @@ import rs.ac.bg.fon.ai.bookstore.model.Genre;
 
 public interface BookDaoInterface {
 	
-	public boolean addBook(Book book);
-	public boolean removeBook(String isbn);
+	public void addBook(Book book) throws RuntimeException;
+	public void removeBook(String isbn) throws RuntimeException;
 	public void removeBooks(String name);
 	public List<Book> getAllBooks();
 	public List<Book> getBooks(char c);

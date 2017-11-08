@@ -115,6 +115,10 @@ public class AddAuthorDialog extends JDialog {
 			JOptionPane.showMessageDialog(frmAddAuthor, "Please enter both first and last name of the author.");
 			return;
 		}
-		GUIController.addAuthor(txtName.getText());
+		try {
+			GUIController.addAuthor(txtName.getText());
+		} catch (RuntimeException e) {
+			JOptionPane.showMessageDialog(frmAddAuthor, e.getMessage());
+		}
 	}
 }

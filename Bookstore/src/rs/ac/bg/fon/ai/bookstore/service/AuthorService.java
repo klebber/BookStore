@@ -10,14 +10,14 @@ public class AuthorService {
 	
 	private static AuthorDaoInterface authorDao = AuthorDaoList.getInstance();
 	
-	public static boolean addAuthor(String name) {
+	public static void addAuthor(String name) throws RuntimeException {
 		Author author = new Author(name);
-		return authorDao.addAuthor(author);
+		authorDao.addAuthor(author);
 	}
 	
-	public static boolean removeAuthor(String name) {
+	public static void removeAuthor(String name) throws RuntimeException {
 		Author author = new Author(name);
-		return authorDao.removeAuthor(author);
+		authorDao.removeAuthor(author);
 	}
 
 	public static List<Author> getAuthors() {

@@ -20,22 +20,24 @@ public class BookDaoList implements BookDaoInterface {
 	}
 	
 	@Override
-	public boolean addBook(Book book) {
-		for (Book temp : books)
-			if(temp.getIsbn().equals(book.getIsbn()) || temp.getTitle().equals(book.getTitle()))
-				return false;
+	public void addBook(Book book) throws RuntimeException {
+		for (Book temp : books) {
+			if(temp.getIsbn().equals(book.getIsbn()))
+				throw new RuntimeException("Book with same isbn already exists.");
+			if(temp.getTitle().equals(book.getTitle()) && temp.getAuthor().equals(book.getAuthor()))
+				throw new RuntimeException("Book of the same author and with the same name already exists.");
+		}
 		books.add(book);
-		return true;
 	}
 	
 	@Override
-	public boolean removeBook(String isbn) {
+	public void removeBook(String isbn) throws RuntimeException {
 		for (Book temp : books)
 			if(temp.getIsbn().equals(isbn)) {
 				books.remove(temp);
-				return true;
+				return;
 			}
-		return false;
+		throw new RuntimeException("Book with this isbn has not been found.");
 	}
 	
 	@Override

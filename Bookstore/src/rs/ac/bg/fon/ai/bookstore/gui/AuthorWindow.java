@@ -106,7 +106,11 @@ public class AuthorWindow extends JDialog {
 									JOptionPane.YES_NO_OPTION);
 					if(n == JOptionPane.NO_OPTION)
 						return;
-					GUIController.removeAuthor(list.getSelectedValue());
+					try {
+						GUIController.removeAuthor(list.getSelectedValue());
+					} catch (RuntimeException e2) {
+						JOptionPane.showMessageDialog(frmAuthor, e2.getMessage());
+					}
 				}
 			});
 			btnRemove.setMinimumSize(new Dimension(80, 23));

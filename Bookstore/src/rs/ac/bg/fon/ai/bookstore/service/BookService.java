@@ -13,16 +13,17 @@ public class BookService {
 	
 	private static BookDaoInterface bookDao = BookDaoList.getInstance();
 	
-	public static boolean addBook(Book book) {
-		return bookDao.addBook(book);
+	public static void addBook(Book book) throws RuntimeException {
+		bookDao.addBook(book);
 	}
 	
-	public static boolean addBook(String isbn, String title, Genre genre, String authorName, String publisher, GregorianCalendar publishDate) {
-		return bookDao.addBook(new Book(isbn, title, genre, new Author(authorName), publisher, publishDate));
+	public static void addBook(String isbn, String title, Genre genre, String authorName, String publisher, 
+			GregorianCalendar publishDate) throws RuntimeException {
+		bookDao.addBook(new Book(isbn, title, genre, new Author(authorName), publisher, publishDate));
 	}
 	
-	public static boolean removeBook(String isbn) {
-		return bookDao.removeBook(isbn);
+	public static void removeBook(String isbn) throws RuntimeException {
+		bookDao.removeBook(isbn);
 	}
 	
 	/**
