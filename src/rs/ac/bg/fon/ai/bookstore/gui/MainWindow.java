@@ -52,13 +52,16 @@ public class MainWindow extends JFrame {
 	private JPanel southPanel;
 	private JButton btnRemove;
 	private JButton btnAuthors;
-
+	
+	private GUIController guiController = new GUIController();
+	
 	/**
 	 * Create the frame.
 	 */
-	public MainWindow(String[] authors) {
+	public MainWindow() {
+		this.authors = guiController.getAuthorsArray();
+		
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/rs/ac/bg/fon/ai/bookstore/resources/open-book.png")));
-		this.authors = authors;
 		setTitle("Bookstore");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -71,6 +74,8 @@ public class MainWindow extends JFrame {
 		contentPane.add(getBooksPanel(), BorderLayout.CENTER);
 		contentPane.add(getEastPanel(), BorderLayout.EAST);
 		contentPane.add(getSouthPanel(), BorderLayout.SOUTH);
+		
+		reloadTable();
 	}
 
 	private JMenuBar getMenuBar_1() {
@@ -123,22 +128,22 @@ public class MainWindow extends JFrame {
 					if(cbBookFilter1.getSelectedIndex() == 0) {
 						cbBookFilter2.setEnabled(false);
 						cbBookFilter2.setModel(new DefaultComboBoxModel<String>());
-						GUIController.reloadTable();
+						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 1) {
 						cbBookFilter2.setEnabled(true);
 						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(new String[] {"--Select--", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}));
-						GUIController.reloadTable();
+						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 2) {
 						cbBookFilter2.setEnabled(true);
 						String[] select = {"--Select--"};
 						String[] both = Stream.concat(Arrays.stream(select), Arrays.stream(Genre.values()).map(Genre::name)).toArray(String[]::new);
 						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(both));
-						GUIController.reloadTable();
+						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 3) {
 						cbBookFilter2.setEnabled(true);
 						String[] select = {"--Select--"};
 						String[] both = Stream.concat(Arrays.stream(select), Arrays.stream(authors)).toArray(String[]::new);
-						GUIController.reloadTable();
+						reloadTable();
 						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(both));
 					}
 				}
@@ -160,18 +165,20 @@ public class MainWindow extends JFrame {
 		}
 		return cbBookFilter2;
 	}
+	//also used to re-apply a filter
 	public void applySelectedFilter() {
 		if(cbBookFilter1.getSelectedIndex() == 0)
-			GUIController.reloadTable();
+			reloadTable();
 		else if(cbBookFilter2.getSelectedIndex() == 0)
-			GUIController.reloadTable();
+			reloadTable();
 		else if(cbBookFilter2.getSelectedItem().toString().length() == 1)
-			GUIController.filterTable(cbBookFilter2.getSelectedItem().toString().charAt(0));
+			updateTable(guiController.getFilteredList(cbBookFilter2.getSelectedItem().toString().charAt(0)));
 		else if(cbBookFilter1.getSelectedIndex() == 2)
-			GUIController.filterTable(Genre.valueOf(cbBookFilter2.getSelectedItem().toString()));
+			updateTable(guiController.getFilteredList(Genre.valueOf(cbBookFilter2.getSelectedItem().toString())));
 		else if(cbBookFilter1.getSelectedIndex() == 3)
-			GUIController.filterTable(new Author(cbBookFilter2.getSelectedItem().toString()));
+			updateTable(guiController.getFilteredList(new Author(cbBookFilter2.getSelectedItem().toString())));
 	}
+
 	private JTable getTable() {
 		if (table == null) {
 			table = new JTable();
@@ -228,7 +235,8 @@ public class MainWindow extends JFrame {
 			btnAdd.setMinimumSize(new Dimension(80, 23));
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GUIController.openAddBookDialog(frmMain, true);
+					openAddBookDialog();
+					applySelectedFilter();
 				}
 			});
 		}
@@ -241,7 +249,8 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					if(table.getSelectedRow() != -1)
 						try {
-							GUIController.removeBook(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+							guiController.removeBook(table.getModel().getValueAt(table.getSelectedRow(), 0).toString());
+							applySelectedFilter();
 						} catch (RuntimeException e2) {
 							JOptionPane.showMessageDialog(frmMain, e2.getMessage());
 						}
@@ -256,11 +265,29 @@ public class MainWindow extends JFrame {
 			btnAuthors = new JButton("Authors");
 			btnAuthors.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GUIController.openAuthorWindow(frmMain, true);
+					openAuthorWindow(frmMain, true);
+					applySelectedFilter();
+					updateAuthorsArray(guiController.getAuthorsArray());
 				}
 			});
 			btnAuthors.setMinimumSize(new Dimension(80, 23));
 		}
 		return btnAuthors;
+	}
+	
+	private void reloadTable() {
+		updateTable(guiController.getAllBooks());
+	}
+	
+	private void openAddBookDialog() {
+		AddBookDialog addBookDialog = new AddBookDialog(frmMain, true, guiController.getAuthorsArray());
+		addBookDialog.setVisible(true);
+		addBookDialog.setLocationRelativeTo(frmMain);
+	}
+	
+	private void openAuthorWindow(JFrame frame, boolean modal) {
+		AuthorWindow authorWindow = new AuthorWindow(frame, modal, guiController.getAuthorsArray());
+		authorWindow.setVisible(true);
+		authorWindow.setLocationRelativeTo(frame);
 	}
 }

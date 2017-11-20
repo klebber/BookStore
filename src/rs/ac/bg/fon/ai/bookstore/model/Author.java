@@ -2,7 +2,6 @@ package rs.ac.bg.fon.ai.bookstore.model;
 
 public class Author {
 
-
 	private String name;
 
 	public Author() {

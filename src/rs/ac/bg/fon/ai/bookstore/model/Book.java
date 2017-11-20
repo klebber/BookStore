@@ -1,6 +1,6 @@
 package rs.ac.bg.fon.ai.bookstore.model;
 
-import java.util.GregorianCalendar;
+import java.util.Date;
 
 public class Book {
 
@@ -9,12 +9,12 @@ public class Book {
 	private Genre genre;
 	private Author author;
 	private String publisher;
-	private GregorianCalendar publishDate;
+	private Date publishDate;
 
 	public Book() {
 	}
 	
-	public Book(String isbn, String title, Genre genre, Author author, String publisher, GregorianCalendar publishDate) {
+	public Book(String isbn, String title, Genre genre, Author author, String publisher, Date publishDate) {
 		super();
 		this.isbn = isbn;
 		this.title = title;
@@ -64,11 +64,11 @@ public class Book {
 		this.publisher = publisher;
 	}
 
-	public GregorianCalendar getPublishDate() {
+	public Date getPublishDate() {
 		return publishDate;
 	}
 
-	public void setPublishDate(GregorianCalendar publishDate) {
+	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
 	}
 

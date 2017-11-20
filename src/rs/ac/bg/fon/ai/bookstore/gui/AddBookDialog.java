@@ -45,6 +45,7 @@ public class AddBookDialog extends JDialog {
 	private JLabel lblAuthor;
 	private JComboBox<String> cbAuthor;
 
+	private GUIController guiController = new GUIController();
 	
 	/**
 	 * Create the dialog.
@@ -273,9 +274,11 @@ public class AddBookDialog extends JDialog {
 			return;
 		}
 		try {
-			GUIController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	(String) cbAuthor.getSelectedItem(), txtPublisher.getText(), date);
+			this.dispose();
+			guiController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	(String) cbAuthor.getSelectedItem(), txtPublisher.getText(), date.getTime());
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(frmAddBook, e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	

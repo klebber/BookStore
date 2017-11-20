@@ -26,6 +26,9 @@ public class AuthorWindow extends JDialog {
 	private JButton btnRemove;
 	private JButton btnClose;
 	private JScrollPane scrollPane;
+	
+	private MainWindow parent;
+	private GUIController guiController = new GUIController();
 
 	/**
 	 * Create the dialog.
@@ -42,6 +45,7 @@ public class AuthorWindow extends JDialog {
 		getContentPane().add(getSouthPanel(), BorderLayout.SOUTH);
 		getContentPane().add(getCentralPanel(), BorderLayout.CENTER);
 		
+		this.parent = (MainWindow) frame;
 		this.authors = authors;
 		if(authors != null)
 			list.setListData(this.authors);
@@ -85,7 +89,8 @@ public class AuthorWindow extends JDialog {
 			btnAdd = new JButton("Add");
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					GUIController.openAddAuthorDialog(true);
+					openAddAuthorDialog(true);
+					updateAuthorList(guiController.getAuthorsArray());
 				}
 			});
 			btnAdd.setMinimumSize(new Dimension(80, 23));
@@ -107,7 +112,9 @@ public class AuthorWindow extends JDialog {
 					if(n == JOptionPane.NO_OPTION)
 						return;
 					try {
-						GUIController.removeAuthor(list.getSelectedValue());
+						guiController.removeAuthor(list.getSelectedValue());
+						updateAuthorList(guiController.getAuthorsArray());
+						parent.applySelectedFilter();
 					} catch (RuntimeException e2) {
 						JOptionPane.showMessageDialog(frmAuthor, e2.getMessage());
 					}
@@ -139,5 +146,11 @@ public class AuthorWindow extends JDialog {
 			scrollPane.setViewportView(getList());
 		}
 		return scrollPane;
+	}
+	
+	private void openAddAuthorDialog(boolean modal) {
+		AddAuthorDialog addAuthorDialog = new AddAuthorDialog(modal);
+		addAuthorDialog.setVisible(true);
+		addAuthorDialog.setLocationRelativeTo(addAuthorDialog);
 	}
 }

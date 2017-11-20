@@ -23,6 +23,8 @@ public class AddAuthorDialog extends JDialog {
 	private JButton btnCancel;
 	private JLabel lblName;
 	private JTextField txtName;
+	
+	private GUIController guiController = new GUIController();
 
 	/**
 	 * Create the dialog.
@@ -116,7 +118,8 @@ public class AddAuthorDialog extends JDialog {
 			return;
 		}
 		try {
-			GUIController.addAuthor(txtName.getText());
+			this.dispose();
+			guiController.addAuthor(txtName.getText());
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(frmAddAuthor, e.getMessage());
 		}

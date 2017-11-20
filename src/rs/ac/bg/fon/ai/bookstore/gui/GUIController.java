@@ -1,30 +1,29 @@
 package rs.ac.bg.fon.ai.bookstore.gui;
 
 import java.awt.EventQueue;
-import java.util.GregorianCalendar;
-
-import javax.swing.JFrame;
+import java.util.Date;
+import java.util.List;
 
 import rs.ac.bg.fon.ai.bookstore.model.Author;
+import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
 import rs.ac.bg.fon.ai.bookstore.service.AuthorService;
+import rs.ac.bg.fon.ai.bookstore.service.AuthorServiceImpl;
 import rs.ac.bg.fon.ai.bookstore.service.BookService;
+import rs.ac.bg.fon.ai.bookstore.service.BookServiceImpl;
 
 
 public class GUIController {
 
-	public static MainWindow mainWindow;
-	public static AddBookDialog addBookDialog;
-	public static AuthorWindow authorWindow;
-	public static AddAuthorDialog addAuthorDialog;
+	private BookService bookService = new BookServiceImpl();
+	private AuthorService authorService = new AuthorServiceImpl();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					mainWindow = new MainWindow(AuthorService.getAuthorsArray());
+					MainWindow mainWindow = new MainWindow();
 					mainWindow.setVisible(true);
-					mainWindow.updateTable(BookService.getBooks());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -32,69 +31,46 @@ public class GUIController {
 		});
 	}
 	
-	public static void openAddBookDialog(JFrame frame, boolean modal) {
-		addBookDialog = new AddBookDialog(frame, modal, AuthorService.getAuthorsArray());
-		addBookDialog.setVisible(true);
-		addBookDialog.setLocationRelativeTo(frame);
+	public void addBook(String ISBN, String title, Genre genre, String author, String publisher, 
+			Date date) throws RuntimeException {
+		bookService.addBook(ISBN, title, genre, author, publisher, date);
 	}
 	
-	public static void openAuthorWindow(JFrame frame, boolean modal) {
-		authorWindow = new AuthorWindow(frame, modal, AuthorService.getAuthorsArray());
-		authorWindow.setVisible(true);
-		authorWindow.setLocationRelativeTo(frame);
+	public void removeBook(String isbn) throws RuntimeException {
+		bookService.removeBook(isbn);
 	}
 	
-	public static void addBook(String ISBN, String title, Genre genre, String author, String publisher, 
-			GregorianCalendar date) throws RuntimeException {
-		BookService.addBook(ISBN, title, genre, author, publisher, date);
-		mainWindow.applySelectedFilter();
-		addBookDialog.dispose();
+	public List<Book> getFilteredList(char c) {
+		return bookService.getBooks(c);
 	}
 	
-	public static void removeBook(String isbn) throws RuntimeException {
-		BookService.removeBook(isbn);
-		mainWindow.applySelectedFilter();
+	public List<Book> getFilteredList(Genre genre) {
+		return bookService.getBooks(genre);
 	}
 	
-	public static void reloadTable() {
-		mainWindow.updateTable(BookService.getBooks());
+	public List<Book> getFilteredList(Author author) {
+		return bookService.getBooks(author);
 	}
 	
-	public static void filterTable(char c) {
-		mainWindow.updateTable(BookService.getBooks(c));
+	public void addAuthor(String name) throws RuntimeException {
+		authorService.addAuthor(name);
 	}
 	
-	public static void filterTable(Genre genre) {
-		mainWindow.updateTable(BookService.getBooks(genre));
+	public void removeAuthor(String name) throws RuntimeException {
+		authorService.removeAuthor(name);
+		bookService.removeBooksByAuthor(name);
 	}
 	
-	public static void filterTable(Author author) {
-		mainWindow.updateTable(BookService.getBooks(author));
+	public String[] getAuthorsArray() {
+		List<Author> authors = authorService.getAllAuthors();
+		
+		String[] authorsArray = new String[authors.size()];
+		for (int i = 0; i < authors.size(); i++)
+			authorsArray[i] = authors.get(i).getName();
+		return authorsArray;
 	}
 	
-	public static void openAddAuthorDialog(boolean modal) {
-		addAuthorDialog = new AddAuthorDialog(modal);
-		addAuthorDialog.setVisible(true);
-		addAuthorDialog.setLocationRelativeTo(addAuthorDialog);
-	}
-	
-	public static void addAuthor(String name) throws RuntimeException {
-		AuthorService.addAuthor(name);
-		addAuthorDialog.dispose();
-		reloadAuthorList();
-		mainWindow.applySelectedFilter();
-		mainWindow.updateAuthorsArray(AuthorService.getAuthorsArray());
-	}
-	
-	public static void removeAuthor(String name) throws RuntimeException {
-		AuthorService.removeAuthor(name);
-		BookService.removeBooksByAuthor(name);
-		reloadAuthorList();
-		mainWindow.applySelectedFilter();
-		mainWindow.updateAuthorsArray(AuthorService.getAuthorsArray());
-	}
-	
-	public static void reloadAuthorList() {
-		authorWindow.updateAuthorList(AuthorService.getAuthorsArray());
+	public List<Book> getAllBooks() {
+		return bookService.getAllBooks();
 	}
 }

@@ -2,7 +2,7 @@ package rs.ac.bg.fon.ai.bookstore.gui;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -12,6 +12,8 @@ import rs.ac.bg.fon.ai.bookstore.model.Book;
 public class TableModel extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 1L;
+	
+	private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy");
 	
 	private String[] columns = {"ISBN", "Title", "Genre", "Author", "Publisher", "Publish date"};
 	private List<Book> books;
@@ -48,9 +50,8 @@ public class TableModel extends AbstractTableModel {
 		case 4:
 			return book.getPublisher();
 		case 5:
-			GregorianCalendar date = book.getPublishDate();
-			return new SimpleDateFormat("dd/MM/yyyy").format(date.getTime());
-
+			Date date = book.getPublishDate();
+			return dateFormatter.format(date.getTime());
 		default:
 			return "/";
 		}
