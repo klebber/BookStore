@@ -6,9 +6,9 @@ import rs.ac.bg.fon.ai.bookstore.model.Author;
 
 public interface AuthorService {
 
-	void addAuthor(String name) throws RuntimeException;
-	void removeAuthor(String name) throws RuntimeException;
+	void addAuthor(int id, String name) throws RuntimeException;
+	void removeAuthor(int id) throws RuntimeException;
 	List<Author> getAllAuthors();
-	Author getAuthor(String authorName);
+	Author getAuthor(int id);
 	
 }

@@ -112,7 +112,7 @@ public class AuthorWindow extends JDialog {
 					if(n == JOptionPane.NO_OPTION)
 						return;
 					try {
-						guiController.removeAuthor(list.getSelectedValue());
+						guiController.removeAuthor(Integer.parseInt(list.getSelectedValue().toString().substring(1).split("]")[0]));
 						updateAuthorList(guiController.getAuthorsArray());
 						parent.applySelectedFilter();
 					} catch (RuntimeException e2) {

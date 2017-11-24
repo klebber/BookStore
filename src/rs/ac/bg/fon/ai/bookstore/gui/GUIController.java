@@ -31,9 +31,9 @@ public class GUIController {
 		});
 	}
 	
-	public void addBook(String ISBN, String title, Genre genre, String author, String publisher, 
+	public void addBook(String ISBN, String title, Genre genre, int authorId, String publisher, 
 			Date date) throws RuntimeException {
-		bookService.addBook(ISBN, title, genre, author, publisher, date);
+		bookService.addBook(ISBN, title, genre, authorId, publisher, date);
 	}
 	
 	public void removeBook(String isbn) throws RuntimeException {
@@ -48,17 +48,17 @@ public class GUIController {
 		return bookService.getBooks(genre);
 	}
 	
-	public List<Book> getFilteredList(Author author) {
-		return bookService.getBooks(author);
+	public List<Book> getFilteredList(int authorId) {
+		return bookService.getBooks(authorId);
 	}
 	
-	public void addAuthor(String name) throws RuntimeException {
-		authorService.addAuthor(name);
+	public void addAuthor(int id, String name) throws RuntimeException {
+		authorService.addAuthor(id, name);
 	}
 	
-	public void removeAuthor(String name) throws RuntimeException {
-		authorService.removeAuthor(name);
-		bookService.removeBooksByAuthor(name);
+	public void removeAuthor(int authorId) throws RuntimeException {
+		authorService.removeAuthor(authorId);
+		bookService.removeBooksByAuthor(authorId);
 	}
 	
 	public String[] getAuthorsArray() {
@@ -66,7 +66,7 @@ public class GUIController {
 		
 		String[] authorsArray = new String[authors.size()];
 		for (int i = 0; i < authors.size(); i++)
-			authorsArray[i] = authors.get(i).getName();
+			authorsArray[i] = authors.get(i).toString();
 		return authorsArray;
 	}
 	

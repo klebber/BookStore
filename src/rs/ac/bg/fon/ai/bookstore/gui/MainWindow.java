@@ -14,7 +14,6 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
-import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
 import java.awt.event.ItemListener;
@@ -176,7 +175,7 @@ public class MainWindow extends JFrame {
 		else if(cbBookFilter1.getSelectedIndex() == 2)
 			updateTable(guiController.getFilteredList(Genre.valueOf(cbBookFilter2.getSelectedItem().toString())));
 		else if(cbBookFilter1.getSelectedIndex() == 3)
-			updateTable(guiController.getFilteredList(new Author(cbBookFilter2.getSelectedItem().toString())));
+			updateTable(guiController.getFilteredList(Integer.parseInt(cbBookFilter2.getSelectedItem().toString().substring(1).split("]")[0])));
 	}
 
 	private JTable getTable() {

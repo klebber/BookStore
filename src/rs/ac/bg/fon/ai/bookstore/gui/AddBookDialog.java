@@ -275,7 +275,7 @@ public class AddBookDialog extends JDialog {
 		}
 		try {
 			this.dispose();
-			guiController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	(String) cbAuthor.getSelectedItem(), txtPublisher.getText(), date.getTime());
+			guiController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	Integer.parseInt(((String) cbAuthor.getSelectedItem()).substring(1).split("]")[0]), txtPublisher.getText(), date.getTime());
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(frmAddBook, e.getMessage());
 			e.printStackTrace();

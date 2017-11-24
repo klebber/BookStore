@@ -25,6 +25,8 @@ public class AddAuthorDialog extends JDialog {
 	private JTextField txtName;
 	
 	private GUIController guiController = new GUIController();
+	private JLabel lblId;
+	private JTextField txtId;
 
 	/**
 	 * Create the dialog.
@@ -55,9 +57,11 @@ public class AddAuthorDialog extends JDialog {
 	private JPanel getCenterPanel() {
 		if (centerPanel == null) {
 			centerPanel = new JPanel();
-			centerPanel.setLayout(new MigLayout("", "[25.00][][19.00][grow][30.00]", "[30.00][]"));
-			centerPanel.add(getLblName(), "cell 1 1");
-			centerPanel.add(getTxtName(), "cell 3 1,growx");
+			centerPanel.setLayout(new MigLayout("", "[25.00][][19.00][grow][30.00]", "[30.00][][]"));
+			centerPanel.add(getLblId(), "cell 1 1");
+			centerPanel.add(getTxtId(), "cell 3 1,growx");
+			centerPanel.add(getLblName(), "cell 1 2");
+			centerPanel.add(getTxtName(), "cell 3 2,growx");
 		}
 		return centerPanel;
 	}
@@ -100,7 +104,6 @@ public class AddAuthorDialog extends JDialog {
 					if(e.getKeyCode() == 10) {
 						complete();
 					}
-						
 				}
 			});
 			txtName.setColumns(10);
@@ -109,6 +112,21 @@ public class AddAuthorDialog extends JDialog {
 	}
 
 	private void complete() {
+		if(txtId.getText().isEmpty()) {
+			JOptionPane.showMessageDialog(frmAddAuthor, "You need to enter id of the author.");
+			return;
+		}
+		double id = -1;
+		try {
+			id = Double.parseDouble(txtId.getText());
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(frmAddAuthor, "Id must be a number.");
+			return;
+		}
+		if(id < 0 || (int) id != id) {
+			JOptionPane.showMessageDialog(frmAddAuthor, "Entered id is in the wrong format.");
+			return;
+		}
 		if(txtName.getText().isEmpty()) {
 			JOptionPane.showMessageDialog(frmAddAuthor, "You need to enter name of the author.");
 			return;
@@ -118,10 +136,31 @@ public class AddAuthorDialog extends JDialog {
 			return;
 		}
 		try {
+			guiController.addAuthor((int) id, txtName.getText());
 			this.dispose();
-			guiController.addAuthor(txtName.getText());
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(frmAddAuthor, e.getMessage());
 		}
+	}
+	private JLabel getLblId() {
+		if (lblId == null) {
+			lblId = new JLabel("Id:");
+		}
+		return lblId;
+	}
+	private JTextField getTxtId() {
+		if (txtId == null) {
+			txtId = new JTextField();
+			txtId.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == 10) {
+						complete();
+					}
+				}
+			});
+			txtId.setColumns(10);
+		}
+		return txtId;
 	}
 }

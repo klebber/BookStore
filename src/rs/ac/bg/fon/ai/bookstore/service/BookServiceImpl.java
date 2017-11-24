@@ -18,16 +18,16 @@ public class BookServiceImpl implements BookService {
 	private AuthorService authorService = new AuthorServiceImpl();
 
 	@Override
-	public void addBook(String isbn, String title, Genre genre, String authorName, String publisher, Date date) throws RuntimeException {
+	public void addBook(String isbn, String title, Genre genre, int authorId, String publisher, Date date) throws RuntimeException {
 		for (Book temp : ListPersistance.getInstance().books) {
 			if(temp.getIsbn().equals(isbn))
 				throw new RuntimeException("Book with same isbn already exists.");
 		}
 		
-		Author author = authorService.getAuthor(authorName);
+		Author author = authorService.getAuthor(authorId);
 		
 		if (author == null) {
-			throw new RuntimeException("Could not load author with name " + authorName);
+			throw new RuntimeException("Could not load author with id: " + authorId);
 		}
 		
 		Book newBook = new Book(isbn, title, genre, author, publisher, date);
@@ -49,12 +49,12 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public void removeBooksByAuthor(String name) {
+	public void removeBooksByAuthor(int authorId) {
 		Iterator<Book> iterator = ListPersistance.getInstance().books.iterator();
 		
 		while (iterator.hasNext()) {
 			Book book = (Book) iterator.next();
-			if(book.getAuthor().getName().equals(name)) {
+			if(book.getAuthor().getId() == authorId) {
 				iterator.remove();
 			}
 		}
@@ -78,7 +78,8 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
-	public List<Book> getBooks(Author author) {
+	public List<Book> getBooks(int authorId) {
+		Author author = authorService.getAuthor(authorId);
 		Criteria criteriaAuthor = new CriteriaAuthor(author);
 		return criteriaAuthor.meetCriteria(ListPersistance.getInstance().books);
 	}

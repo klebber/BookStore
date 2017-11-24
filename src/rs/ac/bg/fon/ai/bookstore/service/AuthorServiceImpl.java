@@ -9,26 +9,26 @@ import rs.ac.bg.fon.ai.bookstore.persistance.ListPersistance;
 public class AuthorServiceImpl implements AuthorService {
 	
 	@Override
-	public void addAuthor(String name) throws RuntimeException {
+	public void addAuthor(int id, String name) throws RuntimeException {
 		for (Author a : ListPersistance.getInstance().authors)
-			if(a.getName().equals(name))
-				throw new RuntimeException("Author with the same name already exists.");
+			if(a.getId() == id)
+				throw new RuntimeException("Author with the same id already exists.");
 		
-		ListPersistance.getInstance().authors.add(new Author(name));
+		ListPersistance.getInstance().authors.add(new Author(id, name));
 	}
 	
 	@Override
-	public void removeAuthor(String name) throws RuntimeException {
+	public void removeAuthor(int id) throws RuntimeException {
 		Iterator<Author> iterator = ListPersistance.getInstance().authors.iterator();
 		
 		while (iterator.hasNext()) {
 			Author author = (Author) iterator.next();
-			if(author.getName().equals(name)) {
+			if(author.getId() == id) {
 				iterator.remove();
 				return;
 			}
 		}
-		throw new RuntimeException("Author with this name has not been found.");
+		throw new RuntimeException("Author you are attempting to remove has not been found.");
 	}
 	
 	@Override
@@ -37,9 +37,9 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 
 	@Override
-	public Author getAuthor(String authorName) {
+	public Author getAuthor(int id) {
 		for (Author author : ListPersistance.getInstance().authors) {
-			if (author.getName().equals(authorName)) {
+			if (author.getId() == id) {
 				return author;
 			}
 		}
