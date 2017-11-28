@@ -61,12 +61,12 @@ public class GUIController {
 		bookService.removeBooksByAuthor(authorId);
 	}
 	
-	public String[] getAuthorsArray() {
+	public Author[] getAuthorsArray() {
 		List<Author> authors = authorService.getAllAuthors();
 		
-		String[] authorsArray = new String[authors.size()];
+		Author[] authorsArray = new Author[authors.size()];
 		for (int i = 0; i < authors.size(); i++)
-			authorsArray[i] = authors.get(i).toString();
+			authorsArray[i] = authors.get(i);
 		return authorsArray;
 	}
 	

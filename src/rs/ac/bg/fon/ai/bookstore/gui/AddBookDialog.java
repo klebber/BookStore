@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
+import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
 
 import javax.swing.DefaultComboBoxModel;
@@ -25,7 +26,7 @@ import java.text.SimpleDateFormat;
 
 public class AddBookDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private String[] authors;
+	private Author[] authors;
 	private AddBookDialog frmAddBook = this;
 	private JPanel southPanel;
 	private JPanel centerPanel;
@@ -43,14 +44,14 @@ public class AddBookDialog extends JDialog {
 	private JTextField txtDate;
 	private JLabel lblFormatDdmmyyyy;
 	private JLabel lblAuthor;
-	private JComboBox<String> cbAuthor;
+	private JComboBox<Author> cbAuthor;
 
 	private GUIController guiController = new GUIController();
 	
 	/**
 	 * Create the dialog.
 	 */
-	public AddBookDialog(JFrame frame, boolean modal, String[] authors) {
+	public AddBookDialog(JFrame frame, boolean modal, Author[] authors) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		this.authors = authors;
@@ -181,10 +182,10 @@ public class AddBookDialog extends JDialog {
 		}
 		return lblAuthor;
 	}
-	private JComboBox<String> getCbAuthor() {
+	private JComboBox<Author> getCbAuthor() {
 		if (cbAuthor == null) {
-			cbAuthor = new JComboBox<String>();
-			cbAuthor.setModel(new DefaultComboBoxModel<String>(authors));
+			cbAuthor = new JComboBox<Author>();
+			cbAuthor.setModel(new DefaultComboBoxModel<Author>(authors));
 		}
 		return cbAuthor;
 	}
@@ -274,11 +275,10 @@ public class AddBookDialog extends JDialog {
 			return;
 		}
 		try {
-			this.dispose();
-			guiController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(),	Integer.parseInt(((String) cbAuthor.getSelectedItem()).substring(1).split("]")[0]), txtPublisher.getText(), date.getTime());
+			guiController.addBook(txtISBN.getText(), txtTitle.getText(), (Genre) cbGenre.getSelectedItem(), ((Author) cbAuthor.getSelectedItem()).getId(), txtPublisher.getText(), date.getTime());
+			dispose();
 		} catch (RuntimeException e) {
 			JOptionPane.showMessageDialog(frmAddBook, e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	

@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 
+import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
 import java.awt.event.ItemListener;
@@ -33,7 +34,7 @@ public class MainWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private MainWindow frmMain = this;
-	private String[] authors;
+	private Author[] authors;
 	
 	private JPanel contentPane;
 	private JMenuBar menuBar;
@@ -43,7 +44,7 @@ public class MainWindow extends JFrame {
 	private JPanel booksPanel;
 	private JLabel lblFilter;
 	private JComboBox<String> cbBookFilter1;
-	private JComboBox<String> cbBookFilter2;
+	private JComboBox<Object> cbBookFilter2;
 	private JButton btnAdd;
 	private JTable table;
 	private JScrollPane scrollPane;
@@ -126,24 +127,24 @@ public class MainWindow extends JFrame {
 				public void itemStateChanged(ItemEvent e) {
 					if(cbBookFilter1.getSelectedIndex() == 0) {
 						cbBookFilter2.setEnabled(false);
-						cbBookFilter2.setModel(new DefaultComboBoxModel<String>());
+						cbBookFilter2.setModel(new DefaultComboBoxModel<Object>());
 						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 1) {
 						cbBookFilter2.setEnabled(true);
-						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(new String[] {"--Select--", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}));
+						cbBookFilter2.setModel(new DefaultComboBoxModel<Object>(new String[] {"--Select--", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}));
 						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 2) {
 						cbBookFilter2.setEnabled(true);
 						String[] select = {"--Select--"};
 						String[] both = Stream.concat(Arrays.stream(select), Arrays.stream(Genre.values()).map(Genre::name)).toArray(String[]::new);
-						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(both));
+						cbBookFilter2.setModel(new DefaultComboBoxModel<Object>(both));
 						reloadTable();
 					} else if(cbBookFilter1.getSelectedIndex() == 3) {
 						cbBookFilter2.setEnabled(true);
 						String[] select = {"--Select--"};
-						String[] both = Stream.concat(Arrays.stream(select), Arrays.stream(authors)).toArray(String[]::new);
+						Object[] both = Stream.concat(Arrays.stream(select), Arrays.stream(authors)).toArray(Object[]::new);
 						reloadTable();
-						cbBookFilter2.setModel(new DefaultComboBoxModel<String>(both));
+						cbBookFilter2.setModel(new DefaultComboBoxModel<Object>(both));
 					}
 				}
 			});
@@ -151,9 +152,9 @@ public class MainWindow extends JFrame {
 		}
 		return cbBookFilter1;
 	}
-	private JComboBox<String> getCbBookFilter2() {
+	private JComboBox<Object> getCbBookFilter2() {
 		if (cbBookFilter2 == null) {
-			cbBookFilter2 = new JComboBox<String>();
+			cbBookFilter2 = new JComboBox<Object>();
 			cbBookFilter2.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 					applySelectedFilter();
@@ -174,8 +175,11 @@ public class MainWindow extends JFrame {
 			updateTable(guiController.getFilteredList(cbBookFilter2.getSelectedItem().toString().charAt(0)));
 		else if(cbBookFilter1.getSelectedIndex() == 2)
 			updateTable(guiController.getFilteredList(Genre.valueOf(cbBookFilter2.getSelectedItem().toString())));
-		else if(cbBookFilter1.getSelectedIndex() == 3)
-			updateTable(guiController.getFilteredList(Integer.parseInt(cbBookFilter2.getSelectedItem().toString().substring(1).split("]")[0])));
+		else if(cbBookFilter1.getSelectedIndex() == 3) {
+			Author a;
+			a = (Author) cbBookFilter2.getSelectedItem();
+			updateTable(guiController.getFilteredList(a.getId()));
+		}
 	}
 
 	private JTable getTable() {
@@ -196,7 +200,7 @@ public class MainWindow extends JFrame {
 		TableModel tableModel = (TableModel) table.getModel();
 		tableModel.updateTable(books);
 	}
-	public void updateAuthorsArray(String[] authors) {
+	public void updateAuthorsArray(Author[] authors) {
 		this.authors = authors;
 		if(cbBookFilter1.getSelectedIndex() == 3)
 			cbBookFilter1.setSelectedIndex(0);

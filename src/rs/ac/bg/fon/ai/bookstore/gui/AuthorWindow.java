@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
+import rs.ac.bg.fon.ai.bookstore.model.Author;
+
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
@@ -16,12 +18,12 @@ import javax.swing.ListSelectionModel;
 
 public class AuthorWindow extends JDialog {
 	private static final long serialVersionUID = 1L;
-	private String[] authors;
+	private Author[] authors;
 	private AuthorWindow frmAuthor = this;
 	private JPanel eastPanel;
 	private JPanel southPanel;
 	private JPanel centralPanel;
-	private JList<String> list;
+	private JList<Author> list;
 	private JButton btnAdd;
 	private JButton btnRemove;
 	private JButton btnClose;
@@ -36,7 +38,7 @@ public class AuthorWindow extends JDialog {
 	 * @param modal 
 	 * @param frame 
 	 */
-	public AuthorWindow(JFrame frame, boolean modal, String[] authors) {
+	public AuthorWindow(JFrame frame, boolean modal, Author[] authors) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Authors");
 		setResizable(false);
@@ -77,9 +79,9 @@ public class AuthorWindow extends JDialog {
 		}
 		return centralPanel;
 	}
-	private JList<String> getList() {
+	private JList<Author> getList() {
 		if (list == null) {
-			list = new JList<String>();
+			list = new JList<Author>();
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		}
 		return list;
@@ -112,7 +114,7 @@ public class AuthorWindow extends JDialog {
 					if(n == JOptionPane.NO_OPTION)
 						return;
 					try {
-						guiController.removeAuthor(Integer.parseInt(list.getSelectedValue().toString().substring(1).split("]")[0]));
+						guiController.removeAuthor(((Author)list.getSelectedValue()).getId());
 						updateAuthorList(guiController.getAuthorsArray());
 						parent.applySelectedFilter();
 					} catch (RuntimeException e2) {
@@ -124,7 +126,7 @@ public class AuthorWindow extends JDialog {
 		}
 		return btnRemove;
 	}
-	public void updateAuthorList(String[] authors) {
+	public void updateAuthorList(Author[] authors) {
 		this.authors = authors;
 		list.setListData(this.authors);
 	}
