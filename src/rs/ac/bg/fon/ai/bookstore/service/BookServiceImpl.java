@@ -61,6 +61,20 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
+	public void updateBook(String currentIsbn, Book updatedBook) throws RuntimeException {
+		Iterator<Book> iterator = ListPersistance.getInstance().books.iterator();
+
+		while (iterator.hasNext()) {
+			Book book = (Book) iterator.next();
+			if (book.getIsbn() == currentIsbn) {
+				book = updatedBook;
+				return;
+			}
+		}
+		throw new RuntimeException("Book with this isbn has not been found.");
+	}
+	
+	@Override
 	public List<Book> getAllBooks() {
 		return ListPersistance.getInstance().books;
 	}

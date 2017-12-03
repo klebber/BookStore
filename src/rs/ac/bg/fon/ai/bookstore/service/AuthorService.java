@@ -8,6 +8,7 @@ public interface AuthorService {
 
 	void addAuthor(int id, String name) throws RuntimeException;
 	void removeAuthor(int id) throws RuntimeException;
+	void updateAuthor(int currentId, Author updatedAuthor) throws RuntimeException;
 	List<Author> getAllAuthors();
 	Author getAuthor(int id);
 	

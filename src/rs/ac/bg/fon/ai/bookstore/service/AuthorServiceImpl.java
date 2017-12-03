@@ -32,6 +32,20 @@ public class AuthorServiceImpl implements AuthorService {
 	}
 	
 	@Override
+	public void updateAuthor(int currentId, Author updatedAuthor) throws RuntimeException {
+		Iterator<Author> iterator = ListPersistance.getInstance().authors.iterator();
+
+		while (iterator.hasNext()) {
+			Author author = (Author) iterator.next();
+			if (author.getId() == currentId) {
+				author = updatedAuthor;
+				return;
+			}
+		}
+		throw new RuntimeException("Author you are attempting to update has not been found.");
+	}
+	
+	@Override
 	public List<Author> getAllAuthors() {
 		return ListPersistance.getInstance().authors;
 	}
