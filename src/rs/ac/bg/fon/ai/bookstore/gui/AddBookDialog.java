@@ -263,7 +263,7 @@ public class AddBookDialog extends JDialog {
 			return;
 		}
 		String[] dateSplit = txtDate.getText().split("/");
-		GregorianCalendar date = new GregorianCalendar(Integer.parseInt(dateSplit[2]), Integer.parseInt(dateSplit[1]) - 1, Integer.parseInt(dateSplit[0]));
+		GregorianCalendar date = new GregorianCalendar(Integer.parseInt(dateSplit[2]), Integer.parseInt(dateSplit[1])-1, Integer.parseInt(dateSplit[0]));
 		String test = new SimpleDateFormat("dd/MM/yyyy").format(date.getTime());
 		if(!txtDate.getText().equals(test)) {
 			JOptionPane.showMessageDialog(frmAddBook, "You have entered non-existant date.");

@@ -11,7 +11,7 @@ import rs.ac.bg.fon.ai.bookstore.filters.CriteriaStartsWith;
 import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
-import rs.ac.bg.fon.ai.bookstore.persistance.ListPersistance;
+import rs.ac.bg.fon.ai.bookstore.persistence.ListPersistence;
 
 public class BookServiceImpl implements BookService {
 	
@@ -19,8 +19,8 @@ public class BookServiceImpl implements BookService {
 
 	@Override
 	public void addBook(String isbn, String title, Genre genre, int authorId, String publisher, Date date) throws RuntimeException {
-		for (Book temp : ListPersistance.getInstance().books) {
-			if(temp.getIsbn().equals(isbn))
+		for (Book book : ListPersistence.getInstance().books) {
+			if(book.getIsbn().equals(isbn))
 				throw new RuntimeException("Book with same isbn already exists.");
 		}
 		
@@ -31,12 +31,12 @@ public class BookServiceImpl implements BookService {
 		}
 		
 		Book newBook = new Book(isbn, title, genre, author, publisher, date);
-		ListPersistance.getInstance().books.add(newBook);
+		ListPersistence.getInstance().books.add(newBook);
 	}
 	
 	@Override
 	public void removeBook(String isbn) throws RuntimeException {
-		Iterator<Book> iterator = ListPersistance.getInstance().books.iterator();
+		Iterator<Book> iterator = ListPersistence.getInstance().books.iterator();
 		
 		while (iterator.hasNext()) {
 			Book book = (Book) iterator.next();
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public void removeBooksByAuthor(int authorId) {
-		Iterator<Book> iterator = ListPersistance.getInstance().books.iterator();
+		Iterator<Book> iterator = ListPersistence.getInstance().books.iterator();
 		
 		while (iterator.hasNext()) {
 			Book book = (Book) iterator.next();
@@ -62,7 +62,7 @@ public class BookServiceImpl implements BookService {
 	
 	@Override
 	public void updateBook(String currentIsbn, Book updatedBook) throws RuntimeException {
-		Iterator<Book> iterator = ListPersistance.getInstance().books.iterator();
+		Iterator<Book> iterator = ListPersistence.getInstance().books.iterator();
 
 		while (iterator.hasNext()) {
 			Book book = (Book) iterator.next();
@@ -75,27 +75,37 @@ public class BookServiceImpl implements BookService {
 	}
 	
 	@Override
+	public Book getBook(String isbn) {
+		for (Book book : ListPersistence.getInstance().books) {
+			if(book.getIsbn().equals(isbn)) {
+				return book;
+			}
+		}
+		throw new RuntimeException("Book with same isbn already exists.");
+	}
+	
+	@Override
 	public List<Book> getAllBooks() {
-		return ListPersistance.getInstance().books;
+		return ListPersistence.getInstance().books;
 	}
 	
 	@Override
 	public List<Book> getBooks(char c) {
 		Criteria startsWith = new CriteriaStartsWith(c);
-		return startsWith.meetCriteria(ListPersistance.getInstance().books);
+		return startsWith.meetCriteria(ListPersistence.getInstance().books);
 	}
 	
 	@Override
 	public List<Book> getBooks(Genre genre) {
 		Criteria criteriaGenre = new CriteriaGenre(genre);
-		return criteriaGenre.meetCriteria(ListPersistance.getInstance().books);
+		return criteriaGenre.meetCriteria(ListPersistence.getInstance().books);
 	}
 	
 	@Override
 	public List<Book> getBooks(int authorId) {
 		Author author = authorService.getAuthor(authorId);
 		Criteria criteriaAuthor = new CriteriaAuthor(author);
-		return criteriaAuthor.meetCriteria(ListPersistance.getInstance().books);
+		return criteriaAuthor.meetCriteria(ListPersistence.getInstance().books);
 	}
-	
+
 }

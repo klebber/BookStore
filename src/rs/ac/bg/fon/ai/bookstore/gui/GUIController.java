@@ -7,16 +7,13 @@ import java.util.List;
 import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
-import rs.ac.bg.fon.ai.bookstore.service.AuthorService;
-import rs.ac.bg.fon.ai.bookstore.service.AuthorServiceImpl;
-import rs.ac.bg.fon.ai.bookstore.service.BookService;
-import rs.ac.bg.fon.ai.bookstore.service.BookServiceImpl;
+import rs.ac.bg.fon.ai.bookstore.service.*;
 
 
 public class GUIController {
 
-	private BookService bookService = new BookServiceImpl();
-	private AuthorService authorService = new AuthorServiceImpl();
+	private BookService bookService = new BookServiceDbImpl();
+	private AuthorService authorService = new AuthorServiceDbImpl();
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -57,8 +54,8 @@ public class GUIController {
 	}
 	
 	public void removeAuthor(int authorId) throws RuntimeException {
-		authorService.removeAuthor(authorId);
 		bookService.removeBooksByAuthor(authorId);
+		authorService.removeAuthor(authorId);
 	}
 	
 	public Author[] getAuthorsArray() {

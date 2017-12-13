@@ -4,22 +4,22 @@ import java.util.Iterator;
 import java.util.List;
 
 import rs.ac.bg.fon.ai.bookstore.model.Author;
-import rs.ac.bg.fon.ai.bookstore.persistance.ListPersistance;
+import rs.ac.bg.fon.ai.bookstore.persistence.ListPersistence;
 
 public class AuthorServiceImpl implements AuthorService {
 	
 	@Override
 	public void addAuthor(int id, String name) throws RuntimeException {
-		for (Author a : ListPersistance.getInstance().authors)
+		for (Author a : ListPersistence.getInstance().authors)
 			if(a.getId() == id)
 				throw new RuntimeException("Author with the same id already exists.");
 		
-		ListPersistance.getInstance().authors.add(new Author(id, name));
+		ListPersistence.getInstance().authors.add(new Author(id, name));
 	}
 	
 	@Override
 	public void removeAuthor(int id) throws RuntimeException {
-		Iterator<Author> iterator = ListPersistance.getInstance().authors.iterator();
+		Iterator<Author> iterator = ListPersistence.getInstance().authors.iterator();
 		
 		while (iterator.hasNext()) {
 			Author author = (Author) iterator.next();
@@ -33,7 +33,7 @@ public class AuthorServiceImpl implements AuthorService {
 	
 	@Override
 	public void updateAuthor(int currentId, Author updatedAuthor) throws RuntimeException {
-		Iterator<Author> iterator = ListPersistance.getInstance().authors.iterator();
+		Iterator<Author> iterator = ListPersistence.getInstance().authors.iterator();
 
 		while (iterator.hasNext()) {
 			Author author = (Author) iterator.next();
@@ -47,12 +47,12 @@ public class AuthorServiceImpl implements AuthorService {
 	
 	@Override
 	public List<Author> getAllAuthors() {
-		return ListPersistance.getInstance().authors;
+		return ListPersistence.getInstance().authors;
 	}
 
 	@Override
 	public Author getAuthor(int id) {
-		for (Author author : ListPersistance.getInstance().authors) {
+		for (Author author : ListPersistence.getInstance().authors) {
 			if (author.getId() == id) {
 				return author;
 			}

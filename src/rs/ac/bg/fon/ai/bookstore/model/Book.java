@@ -1,8 +1,6 @@
 package rs.ac.bg.fon.ai.bookstore.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class Book {
 
@@ -12,7 +10,6 @@ public class Book {
 	private Author author;
 	private String publisher;
 	private Date publishDate;
-	private List<Review> reviews;
 
 	public Book() {
 	}
@@ -25,18 +22,6 @@ public class Book {
 		this.author = author;
 		this.publisher = publisher;
 		this.publishDate = publishDate;
-		this.reviews = new ArrayList<Review>();
-	}
-	
-	public Book(String isbn, String title, Genre genre, Author author, String publisher, Date publishDate, List<Review> reviews) {
-		super();
-		this.isbn = isbn;
-		this.title = title;
-		this.genre = genre;
-		this.author = author;
-		this.publisher = publisher;
-		this.publishDate = publishDate;
-		this.reviews = reviews;
 	}
 
 	public String getIsbn() {
@@ -85,14 +70,6 @@ public class Book {
 
 	public void setPublishDate(Date publishDate) {
 		this.publishDate = publishDate;
-	}
-
-	public List<Review> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<Review> reviews) {
-		this.reviews = reviews;
 	}
 
 	@Override
