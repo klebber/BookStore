@@ -17,7 +17,7 @@ public class ReviewServiceDbImpl implements ReviewService {
 			}
 			String sql = "INSERT INTO reviews " +
 					 	 "VALUES (" + id + ", '" + reviewedBookIsbn + "', '" + reviewAuthor + "', " + text + "')";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -30,7 +30,7 @@ public class ReviewServiceDbImpl implements ReviewService {
 		try {
 			String sql = "DELETE FROM reviews " +
 						 "WHERE id = " + id;
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

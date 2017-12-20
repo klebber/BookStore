@@ -14,6 +14,7 @@ public class BookServiceDbImpl implements BookService {
 
 	@Override
 	public void addBook(String isbn, String title, Genre genre, int authorId, String publisher, Date date) throws RuntimeException {
+		//TODO title with '
 		try {
 			if(getBook(isbn) != null) {
 				throw new RuntimeException("That isbn already exists.");
@@ -22,7 +23,7 @@ public class BookServiceDbImpl implements BookService {
 			String sql = "INSERT INTO books " +
 					 	 "VALUES ('" + isbn + "', '" + title + "', '" + genre + "', " + authorId + 
 					 	 ", '" + publisher + "', '" + dateFormatter.format(date.getTime()) + "')";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -35,7 +36,7 @@ public class BookServiceDbImpl implements BookService {
 		try {
 			String sql = "DELETE FROM books " +
 						 "WHERE isbn = '" + isbn + "'";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -48,7 +49,7 @@ public class BookServiceDbImpl implements BookService {
 		try {
 			String sql = "DELETE FROM books " +
 						 "WHERE authorId = '" + authorId + "'";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -65,7 +66,7 @@ public class BookServiceDbImpl implements BookService {
 						 "', genre = '" + updatedBook.getGenre().toString() + "', authorId = " + updatedBook.getAuthor().getId() + 
 						 ", publisher = '" + updatedBook.getPublisher() + "', date = '" + dateFormatter.format(updatedBook.getPublishDate().getTime()) + "' " +
 						 "WHERE isbn = '" + currentIsbn + "'";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

@@ -1,5 +1,7 @@
 package rs.ac.bg.fon.ai.bookstore.service;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class AuthorServiceDbImpl implements AuthorService {
 			}
 			String sql = "INSERT INTO authors " +
 					"VALUES (" + id + ", '" + name + "')";
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -30,7 +32,7 @@ public class AuthorServiceDbImpl implements AuthorService {
 		try {
 			String sql = "DELETE FROM authors " +
 					"WHERE id = " + id;
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -44,7 +46,7 @@ public class AuthorServiceDbImpl implements AuthorService {
 			String sql = "UPDATE authors " +
 						 "SET id = " + updatedAuthor.getId() + ", name = '" + updatedAuthor.getName() + "' " +
 						 "WHERE id = " + currentId;
-			DatabasePersistence.getInstance().executeUpdate(sql);
+			DatabasePersistence.getInstance().executeInsertOrUpdate(sql);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -55,12 +57,27 @@ public class AuthorServiceDbImpl implements AuthorService {
 	@Override
 	public List<Author> getAllAuthors() {
 		List<Author> authors = new ArrayList<Author>();
-		try {
+		
+		try (Connection conn = DatabasePersistence.getInstance().openConnection1()) {
+			conn.setAutoCommit(false);
+	
 			String sql = "SELECT * FROM authors";
-			authors = DatabasePersistence.getInstance().executeQueryForAuthors(sql);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
+			
+			try {
+				ResultSet rs = conn.createStatement().executeQuery(sql);
+				
+				while(rs.next()) {
+					int id = rs.getInt("id");
+					String name = rs.getString("name");
+					
+					authors.add(new Author(id, name));
+				}
+			} catch (SQLException ex) {
+				conn.rollback();
+				throw ex;
+			}
+			conn.commit();
+		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
 		return authors;
@@ -70,12 +87,19 @@ public class AuthorServiceDbImpl implements AuthorService {
 	public Author getAuthor(int id) {
 		Author author = null;
 		try {
-			String sql = "SELECT * FROM authors " +
-						 "WHERE id = " + id;
-			List<Author> authors = DatabasePersistence.getInstance().executeQueryForAuthors(sql);
-			if(authors.isEmpty())
-				return null;
-			author = authors.get(0);
+			DatabasePersistence.getInstance().openConnection();
+	
+			String sql = 
+					"SELECT * FROM authors " +
+					"WHERE id = " + id;
+			
+			ResultSet rs = DatabasePersistence.getInstance().executeSelectQuery(sql);
+			
+			if(rs.next()) {
+				String name = rs.getString("name");
+				author = new Author(id, name);
+			}
+			DatabasePersistence.getInstance().closeConnection();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (SQLException e) {

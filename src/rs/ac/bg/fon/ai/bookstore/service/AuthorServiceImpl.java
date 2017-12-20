@@ -6,6 +6,7 @@ import java.util.List;
 import rs.ac.bg.fon.ai.bookstore.model.Author;
 import rs.ac.bg.fon.ai.bookstore.persistence.ListPersistence;
 
+@Deprecated
 public class AuthorServiceImpl implements AuthorService {
 	
 	@Override

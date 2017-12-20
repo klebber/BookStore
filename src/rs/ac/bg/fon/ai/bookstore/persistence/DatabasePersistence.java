@@ -23,11 +23,20 @@ public class DatabasePersistence {
 	private DatabasePersistence() {
 	}
 	
+	public Connection openConnection1() throws SQLException, ClassNotFoundException {
+//		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			return DriverManager.getConnection(DB_URL,USER,PASS);
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
+//			return null;
+//		}
+	}
+	
 	public void openConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.jdbc.Driver");
 		conn = DriverManager.getConnection(DB_URL,USER,PASS);
 		stmt = conn.createStatement();
-		
 	}
 	
 	public void closeConnection() throws SQLException {
@@ -35,21 +44,17 @@ public class DatabasePersistence {
 		conn.close();
 	}
 	
-	public void executeUpdate(String sql) throws ClassNotFoundException, SQLException {
+	public void executeInsertOrUpdate(String sql) throws ClassNotFoundException, SQLException {
 		openConnection();
 		stmt.executeUpdate(sql);
 		closeConnection();
 	}
 	
-	public List<Author> executeQueryForAuthors(String sql) throws ClassNotFoundException, SQLException {
-		openConnection();
+	public ResultSet executeSelectQuery(String sql) throws ClassNotFoundException, SQLException {
+//		openConnection();
 		ResultSet rs = stmt.executeQuery(sql);
-		List<Author> authors = new ArrayList<Author>();
-		while(rs.next()) {
-			authors.add(new Author(rs.getInt("id"), rs.getString("name")));
-		}
-		closeConnection();
-		return authors;
+//		closeConnection();
+		return rs;
 	}
 	
 	public List<Book> executeQueryForBooks(String sql) throws ClassNotFoundException, SQLException {
