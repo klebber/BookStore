@@ -13,6 +13,7 @@ import rs.ac.bg.fon.ai.bookstore.model.Book;
 import rs.ac.bg.fon.ai.bookstore.model.Genre;
 import rs.ac.bg.fon.ai.bookstore.persistence.ListPersistence;
 
+@Deprecated
 public class BookServiceImpl implements BookService {
 	
 	private AuthorService authorService = new AuthorServiceImpl();

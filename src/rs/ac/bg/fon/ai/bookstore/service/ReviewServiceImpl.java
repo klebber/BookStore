@@ -7,6 +7,7 @@ import java.util.List;
 import rs.ac.bg.fon.ai.bookstore.model.Review;
 import rs.ac.bg.fon.ai.bookstore.persistence.ListPersistence;
 
+@Deprecated
 public class ReviewServiceImpl implements ReviewService {
 
 	@Override
